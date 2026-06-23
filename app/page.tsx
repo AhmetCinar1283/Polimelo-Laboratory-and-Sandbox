@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import SafeImage from "@/components/SafeImage";
 
 export default function GlobalPortfolioHub() {
   return (
@@ -86,16 +87,30 @@ export default function GlobalPortfolioHub() {
             </div>
           </div>
           
-          <h1 style={{ 
-            fontSize: "2.8rem", 
-            margin: "10px 0 0 0", 
-            fontWeight: "700", 
-            letterSpacing: "-0.03em", 
-            color: "var(--title-color)",
-            fontFamily: "Georgia, serif" 
-          }}>
-            AHMET ÇINAR
-          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "15px", marginBottom: "5px" }}>
+            <SafeImage 
+              src="/logo-square.png" 
+              alt="Polimelo Logo" 
+              style={{ 
+                width: "56px", 
+                height: "56px", 
+                borderRadius: "12px", 
+                border: "2px solid var(--border-color)",
+                backgroundColor: "var(--card-bg)",
+                objectFit: "cover"
+              }}
+            />
+            <h1 style={{ 
+              fontSize: "2.8rem", 
+              margin: 0, 
+              fontWeight: "700", 
+              letterSpacing: "-0.03em", 
+              color: "var(--title-color)",
+              fontFamily: "Georgia, serif" 
+            }}>
+              AHMET ÇINAR
+            </h1>
+          </div>
           <div style={{ 
             marginTop: "12px", 
             fontSize: "1.1rem", 
@@ -221,9 +236,16 @@ export default function GlobalPortfolioHub() {
                 <h3 style={{ fontSize: "0.75rem", fontFamily: "'Courier New', monospace", textTransform: "uppercase", letterSpacing: "2px", color: "var(--accent-red)", margin: "0 0 10px 0", fontWeight: "bold" }}>
                   ⚠️ COMPUTATIONAL OUTPOST
                 </h3>
-                <h4 style={{ margin: "0 0 10px 0", fontFamily: "Georgia, serif", fontSize: "1.3rem", fontWeight: "bold", color: "var(--title-color)" }}>
-                  Digital Laboratory Sandbox
-                </h4>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 10px 0" }}>
+                  <SafeImage 
+                    src="/logo-square.png" 
+                    alt="Lab Icon" 
+                    style={{ width: "24px", height: "24px", borderRadius: "6px", border: "1px solid var(--border-color)", objectFit: "cover" }}
+                  />
+                  <h4 style={{ margin: 0, fontFamily: "Georgia, serif", fontSize: "1.3rem", fontWeight: "bold", color: "var(--title-color)" }}>
+                    Digital Laboratory Sandbox
+                  </h4>
+                </div>
                 <p style={{ margin: "0 0 20px 0", fontSize: "0.95rem", color: "var(--foreground)", textAlign: "justify", lineHeight: "1.5" }}>
                   Decoupled browser modules, runtime WebAssembly experiments, live linear regression models, and matrix visualizers operating within browser scopes.
                 </p>
@@ -250,9 +272,16 @@ export default function GlobalPortfolioHub() {
                 <h3 style={{ fontSize: "0.75rem", fontFamily: "'Courier New', monospace", textTransform: "uppercase", letterSpacing: "2px", color: "var(--accent-green)", margin: "0 0 10px 0", fontWeight: "bold" }}>
                   📚 ACADEMIC OUTLINE
                 </h3>
-                <h4 style={{ margin: "0 0 10px 0", fontFamily: "Georgia, serif", fontSize: "1.3rem", fontWeight: "bold", color: "var(--title-color)" }}>
-                  Structured Study Summaries
-                </h4>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 10px 0" }}>
+                  <SafeImage 
+                    src="/logo-square.png" 
+                    alt="Course Icon" 
+                    style={{ width: "24px", height: "24px", borderRadius: "6px", border: "1px solid var(--border-color)", objectFit: "cover" }}
+                  />
+                  <h4 style={{ margin: 0, fontFamily: "Georgia, serif", fontSize: "1.3rem", fontWeight: "bold", color: "var(--title-color)" }}>
+                    Structured Study Summaries
+                  </h4>
+                </div>
                 <p style={{ margin: "0 0 20px 0", fontSize: "0.95rem", color: "var(--foreground)", textAlign: "justify", lineHeight: "1.5" }}>
                   Chronological study notes, mathematical derivations, backpropagation calculators, and algorithmic formulations typeset in LaTeX.
                 </p>

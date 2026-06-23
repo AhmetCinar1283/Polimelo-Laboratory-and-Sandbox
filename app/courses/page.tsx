@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { coursesRegistry } from "@/registry/courses";
+import SafeImage from "@/components/SafeImage";
 
 export default function CoursesHub() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -244,15 +245,22 @@ export default function CoursesHub() {
                 </div>
 
                 {/* Course Title */}
-                <h2 style={{ 
-                  margin: "0 0 12px 0", 
-                  fontSize: "1.6rem", 
-                  color: "var(--title-color)", 
-                  fontFamily: "Georgia, serif",
-                  fontWeight: "bold"
-                }}>
-                  {course.title}
-                </h2>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 12px 0" }}>
+                  <SafeImage 
+                    src="/logo-square.png" 
+                    alt="Polimelo Logo" 
+                    style={{ width: "24px", height: "24px", borderRadius: "6px", border: "1px solid var(--border-color)", objectFit: "cover" }}
+                  />
+                  <h2 style={{ 
+                    margin: 0, 
+                    fontSize: "1.6rem", 
+                    color: "var(--title-color)", 
+                    fontFamily: "Georgia, serif",
+                    fontWeight: "bold"
+                  }}>
+                    {course.title}
+                  </h2>
+                </div>
 
                 {/* Short description */}
                 <p style={{ 

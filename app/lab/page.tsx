@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { labsRegistry } from "@/registry/labs";
+import SafeImage from "@/components/SafeImage";
 
 export default function LabDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -256,15 +257,22 @@ export default function LabDashboard() {
                 </div>
 
                 {/* Module Title */}
-                <h2 style={{ 
-                  margin: "0 0 10px 0", 
-                  fontSize: "1.4rem", 
-                  color: "var(--title-color)", 
-                  fontFamily: "Georgia, serif",
-                  fontWeight: "bold"
-                }}>
-                  {project.title}
-                </h2>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 10px 0" }}>
+                  <SafeImage 
+                    src="/logo-square.png" 
+                    alt="Polimelo Logo" 
+                    style={{ width: "24px", height: "24px", borderRadius: "6px", border: "1px solid var(--border-color)", objectFit: "cover" }}
+                  />
+                  <h2 style={{ 
+                    margin: 0, 
+                    fontSize: "1.4rem", 
+                    color: "var(--title-color)", 
+                    fontFamily: "Georgia, serif",
+                    fontWeight: "bold"
+                  }}>
+                    {project.title}
+                  </h2>
+                </div>
 
                 {/* Abstract Body */}
                 <p style={{ 

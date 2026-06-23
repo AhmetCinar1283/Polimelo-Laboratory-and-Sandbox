@@ -4,6 +4,7 @@ import SayHello from "@/components/lab/SayHello";
 import MatrixMultiplier from "@/components/lab/MatrixMultiplier";
 import LinearRegression from "@/components/lab/LinearRegression";
 import { labsRegistry } from "@/registry/labs";
+import SafeImage from "@/components/SafeImage";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -109,16 +110,23 @@ export default async function LabDetailPage({ params }: PageProps) {
           <div style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "2px", color: "var(--text-muted)", marginBottom: "5px" }}>
             Open Research Sandbox / Component Node: {projectId.toUpperCase()}
           </div>
-          <h1 style={{ 
-            fontSize: "2.2rem", 
-            margin: 0, 
-            fontWeight: "700", 
-            letterSpacing: "-0.02em", 
-            color: "var(--title-color)",
-            fontFamily: "Georgia, serif" 
-          }}>
-            LAB_PROJECT_RUN()
-          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "10px" }}>
+            <SafeImage 
+              src="/logo-square.png"
+              alt="Polimelo Logo" 
+              style={{ width: "36px", height: "36px", borderRadius: "8px", border: "1.5px solid var(--border-color)", objectFit: "cover" }}
+            />
+            <h1 style={{ 
+              fontSize: "2.2rem", 
+              margin: 0, 
+              fontWeight: "700", 
+              letterSpacing: "-0.02em", 
+              color: "var(--title-color)",
+              fontFamily: "Georgia, serif" 
+            }}>
+              LAB_PROJECT_RUN()
+            </h1>
+          </div>
         </header>
 
         {/* Render Interactive Module */}
