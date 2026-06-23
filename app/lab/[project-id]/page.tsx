@@ -183,3 +183,13 @@ export default async function LabDetailPage({ params }: PageProps) {
     </div>
   );
 }
+
+// Pre-render lab detail static params
+export async function generateStaticParams() {
+  return labsRegistry.map(lab => ({
+    "project-id": lab.id
+  }));
+}
+
+export const dynamicParams = false;
+

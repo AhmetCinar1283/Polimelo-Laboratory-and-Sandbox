@@ -243,3 +243,6 @@ export async function generateStaticParams() {
   });
   return paths;
 }
+
+export const dynamicParams = false;
+

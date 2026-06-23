@@ -212,3 +212,6 @@ export async function generateStaticParams() {
     "course-id": course.id
   }));
 }
+
+export const dynamicParams = false;
+
