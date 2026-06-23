@@ -1,0 +1,91 @@
+# Sparse Matrices & CSR Representation
+
+In computational mathematics, a **sparse matrix** is a matrix in which most of the elements are zero. Storing all these zeros is highly inefficient in terms of memory and compute. Therefore, we utilize specialized data structures to store only the non-zero elements.
+
+One of the most widely used formats is the **Compressed Sparse Row (CSR)** format.
+
+
+> To see basic matrix operations and step-by-step products in action, you can load the <Ref lab="matrix-multiplier" label="Matrix Multiplier Visualizer" /> directly in the browser sandbox.
+
+---
+
+## The Core Concept
+
+A sparse matrix $A \in \mathbb{R}^{m \times n}$ with $N_{nz}$ non-zero elements is represented in CSR format using three one-dimensional arrays:
+
+1. `val`: A floating-point array of size $N_{nz}$ containing the values of the non-zero elements.
+2. `col_ind`: An integer array of size $N_{nz}$ containing the column indices of the elements in `val`.
+3. `row_ptr`: An integer array of size $m + 1$ containing the index in `val` and `col_ind` where each row begins. The last element `row_ptr[m]` is equal to $N_{nz}$.
+
+### Mathematical Definition of Arrays
+
+Given a matrix $A$, the array values are defined as follows:
+
+$$\text{val}[k] = A_{i, j}$$
+$$\text{col\_ind}[k] = j$$
+
+Where $k$ is the index of the non-zero element in row-major order, and:
+
+$$\text{row\_ptr}[i] \le k < \text{row\_ptr}[i+1]$$
+
+---
+
+## Practical Example
+
+Consider the following $3 \times 4$ sparse matrix:
+
+$$
+A = \begin{pmatrix}
+10 & 0 & 0 & 20 \\
+0 & 30 & 0 & 0 \\
+0 & 0 & 50 & 60
+\end{pmatrix}
+$$
+
+Let's identify the non-zero values in row-major order:
+* Row 0: $10$ (at col 0), $20$ (at col 3)
+* Row 1: $30$ (at col 1)
+* Row 2: $50$ (at col 2), $60$ (at col 3)
+
+The total number of non-zero elements is $N_{nz} = 5$.
+
+The CSR arrays are computed as:
+
+* `val` = `[10, 20, 30, 50, 60]`
+* `col_ind` = `[0, 3, 1, 2, 3]`
+* `row_ptr` = `[0, 2, 3, 5]`
+
+---
+
+## Sparse Matrix-Vector Multiplication (SpMV)
+
+Evaluating $y = A x$ is a central routine in solver pipelines. The CSR representation allows us to compute this product very efficiently using the following algorithm:
+
+```python
+def spmv_csr(val, col_ind, row_ptr, x, num_rows):
+    # Initialize output vector y with zeros
+    y = [0.0] * num_rows
+    
+    # Iterate through each row
+    for i in range(num_rows):
+        row_start = row_ptr[i]
+        row_end = row_ptr[i + 1]
+        row_sum = 0.0
+        
+        # Accumulate dot product for the row
+        for k in range(row_start, row_end):
+            col = col_ind[k]
+            row_sum += val[k] * x[col]
+            
+        y[i] = row_sum
+        
+    return y
+```
+
+### Computational Complexity
+
+Compared to dense matrix-vector multiplication which takes $\mathcal{O}(m \cdot n)$ operations, SpMV using CSR takes:
+
+$$\text{Complexity} = \mathcal{O}(m + N_{nz})$$
+
+Since $N_{nz} \ll m \cdot n$, this represents an enormous reduction in execution time and memory footprint for large systems.

@@ -1,0 +1,130 @@
+# Backpropagation from First Principles
+
+In this summary, we derive the equations of **backpropagation** for a multi-layer feedforward neural network (Multi-Layer Perceptron) using standard mathematical calculus.
+
+> [!NOTE]
+> To see a visual simulation of parameter fitting and gradient optimization on a live canvas, you can launch the <Ref lab="linear-regression" label="Linear Regression Simulator" /> from the digital outpost.
+
+---
+
+## 1. Network Architecture
+
+Consider a feedforward network with $L$ layers. For a layer $l \in \{1, 2, \dots, L\}$:
+* $w_{jk}^l$ is the weight connecting neuron $k$ in layer $l-1$ to neuron $j$ in layer $l$.
+* $b_j^l$ is the bias of neuron $j$ in layer $l$.
+* $z_j^l$ is the weighted input to activation function of neuron $j$ in layer $l$.
+* $a_j^l$ is the activation output of neuron $j$ in layer $l$.
+
+The forward propagation relations are defined as:
+
+$$z_j^l = \sum_k w_{jk}^l a_k^{l-1} + b_j^l$$
+$$a_j^l = \sigma(z_j^l)$$
+
+where $\sigma$ is an activation function (e.g., Sigmoid, ReLU).
+
+---
+
+## 2. The Loss Function
+
+We define a cost function $C$ for a single training instance. For example, using Mean Squared Error (MSE):
+
+$$C = \frac{1}{2} \sum_j (y_j - a_j^L)^2$$
+
+where $y_j$ is the target value, and $a_j^L$ is the output layer activation.
+
+---
+
+## 3. Deriving the Backpropagation Equations
+
+To update weights and biases using gradient descent, we need to compute the partial derivatives of the cost $C$ with respect to every weight $w_{jk}^l$ and bias $b_j^l$.
+
+We define the **error** $\delta_j^l$ of neuron $j$ in layer $l$ as:
+
+$$\delta_j^l \equiv \frac{\partial C}{\partial z_j^l}$$
+
+### Equation 1: Error in Output Layer ($L$)
+
+Applying the chain rule:
+
+$$\delta_j^L = \frac{\partial C}{\partial a_j^L} \frac{\partial a_j^L}{\partial z_j^L}$$
+
+Since $C = \frac{1}{2} \sum_j (y_j - a_j^L)^2$ and $a_j^L = \sigma(z_j^L)$:
+
+$$\frac{\partial C}{\partial a_j^L} = -(y_j - a_j^L) \quad \text{and} \quad \frac{\partial a_j^L}{\partial z_j^L} = \sigma'(z_j^L)$$
+
+Thus:
+
+$$\delta_j^L = -(y_j - a_j^L) \sigma'(z_j^L)$$
+
+### Equation 2: Error in Hidden Layers ($l$)
+
+We calculate the error $\delta_j^l$ in terms of the error of the subsequent layer $\delta_k^{l+1}$:
+
+$$\delta_j^l = \frac{\partial C}{\partial z_j^l} = \sum_k \frac{\partial C}{\partial z_k^{l+1}} \frac{\partial z_k^{l+1}}{\partial z_j^l} = \sum_k \delta_k^{l+1} \frac{\partial z_k^{l+1}}{\partial z_j^l}$$
+
+Since $z_k^{l+1} = \sum_i w_{ki}^{l+1} a_i^l + b_k^{l+1}$ and $a_i^l = \sigma(z_i^l)$, we have:
+
+$$\frac{\partial z_k^{l+1}}{\partial z_j^l} = w_{kj}^{l+1} \sigma'(z_j^l)$$
+
+Substituting this back gives:
+
+$$\delta_j^l = \left( \sum_k w_{kj}^{l+1} \delta_k^{l+1} \right) \sigma'(z_j^l)$$
+
+### Equation 3: Derivative with respect to Biases
+
+$$\frac{\partial C}{\partial b_j^l} = \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial b_j^l} = \delta_j^l \cdot 1 = \delta_j^l$$
+
+### Equation 4: Derivative with respect to Weights
+
+$$\frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial w_{jk}^l} = \delta_j^l a_k^{l-1}$$
+
+---
+
+## 4. Backpropagation Implementation
+
+Here is a simplified TypeScript snippet demonstrating the calculation of output error and gradient descent updates:
+
+```typescript
+interface NetworkLayer {
+  weights: number[][]; // [neurons_out][neurons_in]
+  biases: number[];
+  inputs: number[];
+  outputs: number[];
+  zs: number[];
+}
+
+function sigmoidPrime(z: number): number {
+  const s = 1.0 / (1.0 + Math.exp(-z));
+  return s * (1.0 - s);
+}
+
+// Single step weight and bias update
+function backwardPass(
+  layer: NetworkLayer,
+  nextLayerWeights: number[][],
+  nextLayerErrors: number[],
+  learningRate: number
+): number[] {
+  const numNeurons = layer.weights.length;
+  const currentErrors: number[] = [];
+
+  for (let j = 0; j < numNeurons; j++) {
+    // Backpropagate error sum
+    let errorSum = 0;
+    for (let k = 0; k < nextLayerErrors.length; k++) {
+      errorSum += nextLayerWeights[k][j] * nextLayerErrors[k];
+    }
+    
+    const delta = errorSum * sigmoidPrime(layer.zs[j]);
+    currentErrors.push(delta);
+
+    // Update weights and biases
+    layer.biases[j] -= learningRate * delta;
+    for (let k = 0; k < layer.inputs.length; k++) {
+      layer.weights[j][k] -= learningRate * delta * layer.inputs[k];
+    }
+  }
+
+  return currentErrors;
+}
+```

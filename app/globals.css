@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbfaf7;
+  --foreground: #2b2a27;
+  --title-color: #0f0f0f;
+  --text-muted: #66625d;
+  --card-bg: #f3efe6;
+  --card-bg-hover: #e6e2d8;
+  --border-color: #2d2c2a;
+  --dashed-border-color: #b5b0a7;
+  --primary: #2d2c2a;
+  --primary-contrast: #fbfaf7;
+  --code-bg: #eae5dc;
+  --code-inline-bg: #e2ded6;
+  --accent-green: #21692b;
+  --accent-red: #ac2323;
+  --input-bg: #ffffff;
+  --theory-badge-bg: #f2ece2;
 }
 
-@theme inline {
+.dark {
+  --background: #121316;
+  --foreground: #d1d4db;
+  --title-color: #ffffff;
+  --text-muted: #7a7e85;
+  --card-bg: #1a1b20;
+  --card-bg-hover: #23252c;
+  --border-color: #353740;
+  --dashed-border-color: #2c2e35;
+  --primary: #d1d4db;
+  --primary-contrast: #121316;
+  --code-bg: #1e2026;
+  --code-inline-bg: #262830;
+  --accent-green: #44b855;
+  --accent-red: #ef5a5a;
+  --input-bg: #16171c;
+  --theory-badge-bg: #222329;
+}
+
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-neutral-50: var(--card-bg);
+  --color-neutral-100: var(--card-bg);
+  --color-neutral-200: var(--card-bg-hover);
+  --color-neutral-300: var(--dashed-border-color);
+  --color-neutral-500: var(--text-muted);
+  --color-neutral-700: var(--foreground);
+  --color-neutral-800: var(--foreground);
+  --color-black: var(--title-color);
+  --color-white: var(--background);
+  
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Enable smooth transitions on backgrounds and colors */
+a, button, input, select, textarea, div, article, section, header, footer {
+  transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ref-link-hover {
+  transition: all 0.15s ease;
+}
+
+.ref-link-hover:hover {
+  background-color: var(--primary) !important;
+  color: var(--primary-contrast) !important;
+  box-shadow: none !important;
+  transform: translate(2px, 2px);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+
+
