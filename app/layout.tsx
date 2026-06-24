@@ -58,6 +58,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      
       <head>
         <link rel="icon" href="/logo-round.png" type="image/png" />
         <link
