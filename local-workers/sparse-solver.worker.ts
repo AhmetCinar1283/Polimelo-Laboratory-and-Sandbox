@@ -43,3 +43,5 @@ self.onmessage = async (event: MessageEvent) => {
     }
   }
 };
+
+export {};

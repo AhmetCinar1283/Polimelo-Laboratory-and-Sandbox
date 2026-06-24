@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { coursesRegistry } from "@/registry/courses";
 import { labsRegistry } from "@/registry/labs";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://polimelo.com";
   
