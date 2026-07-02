@@ -25,9 +25,6 @@ export const metadata: Metadata = {
   creator: "Ahmet Çınar",
   publisher: "Ahmet Çınar",
   metadataBase: new URL("https://polimelo.com"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "tr_TR",
@@ -35,11 +32,20 @@ export const metadata: Metadata = {
     siteName: "Ahmet Çınar - Digital Lab",
     title: "Ahmet Çınar | Computer Engineer & Full-Stack Developer",
     description: "Computer Engineering student at Ankara University and full-stack developer. Operating Polimelo, engineering decoupled full-stack ecosystems, reactive mobile interfaces, and intelligent serverless architectures.",
+    images: [
+      {
+        url: "/polimelo-lab-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Polimelo Laboratory and Sandbox",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ahmet Çınar | Computer Engineer & Full-Stack Developer",
     description: "Computer Engineering student at Ankara University and full-stack developer. Operating Polimelo, engineering decoupled full-stack ecosystems.",
+    images: ["/polimelo-lab-logo.png"],
   },
   robots: {
     index: true,

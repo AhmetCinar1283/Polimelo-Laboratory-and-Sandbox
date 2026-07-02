@@ -6,11 +6,51 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Ahmet Çınar | Communication Protocols",
   description: "Get in touch with Ahmet Çınar. Send transmission payloads directly or connect via GitHub, LinkedIn, or secure email hello@polimelo.com.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact Ahmet Çınar | Communication Protocols",
+    description: "Get in touch with Ahmet Çınar. Send transmission payloads directly or connect via GitHub, LinkedIn, or secure email hello@polimelo.com.",
+    url: "https://polimelo.com/contact",
+    type: "website",
+    images: [
+      {
+        url: "/polimelo-lab-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Contact Ahmet Çınar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Ahmet Çınar | Communication Protocols",
+    description: "Get in touch with Ahmet Çınar. Send transmission payloads directly or connect via GitHub, LinkedIn, or secure email hello@polimelo.com.",
+    images: ["/polimelo-lab-logo.png"],
+  },
 };
 
 export default function ContactPage() {
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Ahmet Çınar",
+    "description": "Get in touch with Ahmet Çınar. Send transmission payloads directly or connect via GitHub, LinkedIn, or secure email hello@polimelo.com.",
+    "url": "https://polimelo.com/contact",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Ahmet Çınar",
+      "email": "hello@polimelo.com"
+    }
+  };
+
   return (
     <div className="py-16 px-10 bg-background text-foreground min-h-screen leading-relaxed">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
       <div className="max-w-[850px] mx-auto animate-fade-in">
         <nav>
           <Link 

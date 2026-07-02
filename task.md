@@ -17,6 +17,8 @@
   - [x] Create `registry/courses/neural-networks.ts`
   - [x] Update `registry/courses.ts`
   - [x] Update `registry/labs.ts`
+- [x] Overhaul `app/about/page.tsx`
+  - [x] Add canonical tag, inject AboutPage/ProfilePage schemas
 - [x] Update Content File
   - [x] Modify `content/courses/linear-algebra-for-ml/linear-equations-and-singularity.mdx`
 - [x] Build & Verify

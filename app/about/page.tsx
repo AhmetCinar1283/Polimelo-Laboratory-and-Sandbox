@@ -5,11 +5,71 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About Ahmet Çınar | Academic & Professional Bio",
   description: "Learn more about Ahmet Çınar, Computer Engineering student at Ankara University, specializing in reactive full-stack development, serverless systems, and WebAssembly.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Ahmet Çınar | Academic & Professional Bio",
+    description: "Learn more about Ahmet Çınar, Computer Engineering student at Ankara University, specializing in reactive full-stack development, serverless systems, and WebAssembly.",
+    url: "https://polimelo.com/about",
+    type: "profile",
+    images: [
+      {
+        url: "/polimelo-lab-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "About Ahmet Çınar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Ahmet Çınar | Academic & Professional Bio",
+    description: "Learn more about Ahmet Çınar, Computer Engineering student at Ankara University, specializing in reactive full-stack development, serverless systems, and WebAssembly.",
+    images: ["/polimelo-lab-logo.png"],
+  },
 };
 
 export default function AboutPage() {
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Ahmet Çınar",
+      "jobTitle": "Full-Stack Developer & Computer Engineering Student",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Ankara University"
+      },
+      "url": "https://polimelo.com/about"
+    }
+  };
+
+  const profileSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Ahmet Çınar",
+      "alternateName": "Ahmet Cinar",
+      "sameAs": [
+        "https://github.com/AhmetCinar1283",
+        "https://www.linkedin.com/in/ahmet-cinar-a1283c/"
+      ]
+    }
+  };
+
   return (
     <div className="py-16 px-10 bg-background text-foreground min-h-screen leading-relaxed">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileSchema) }}
+      />
       <div className="max-w-[850px] mx-auto animate-fade-in">
         <nav>
           <Link 
