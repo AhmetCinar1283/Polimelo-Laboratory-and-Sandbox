@@ -1,0 +1,86 @@
+import { SingularityVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 2.2 Visualizing Singularity in Systems
+
+In the previous lecture, we solved a simple system of equations where two lines crossed at exactly one point. However, systems of linear equations do not always behave so nicely. Sometimes, equations contradict each other, and other times they repeat the same information.
+
+In mathematics, this behavior determines whether a system is **Non-Singular** (solvable) or **Singular** (unsolvable). Let's explore what these terms mean geometrically.
+
+---
+
+## 1. The Three Geometric States
+
+Depending on the relationship between the equations, a system can fall into one of three geometric states:
+
+### State I: Unique Solution (Non-Singular)
+The equations provide independent, non-contradictory constraints. 
+* **Geometry:** The lines cross at exactly **one point**. 
+* **Solution:** There is a single unique coordinate $(x, y)$ that satisfies all equations.
+* **Algebraic Example:**
+  $$y = -x + 2$$
+  $$y = 2x - 1$$
+  *(These lines cross at $(1, 1)$, giving a single unique solution).*
+
+---
+
+### State II: No Solution (Singular)
+The equations contradict each other. They demand physically impossible combinations.
+* **Geometry:** The lines are parallel and **never meet**.
+* **Solution:** There is no point in space that can satisfy both equations at the same time.
+* **Algebraic Example:**
+  $$y = x + 1$$
+  $$y = x - 2$$
+  *(If you try to set them equal, you get $x + 1 = x - 2 \implies 1 = -2$, which is impossible).*
+
+---
+
+### State III: Infinite Solutions (Singular)
+The equations represent redundant constraints. One equation is just a copy or multiple of another.
+* **Geometry:** The lines lie **directly on top of each other** (they overlap completely).
+* **Solution:** Every point on the line is a solution.
+* **Algebraic Example:**
+  $$y = 0.5x + 1$$
+  $$2y = x + 2$$
+  *(If you divide the second equation by 2, you get the exact same line as the first: $y = 0.5x + 1$. The second constraint added no new information).*
+
+---
+
+## 2. Interactive Geometry Sandbox
+
+Use the widget below to toggle between **Unique**, **No Solution**, and **Infinite Solutions** states. Watch how the lines position themselves on the grid and think about their intersections.
+
+<SingularityVisualizer />
+
+---
+
+## 3. Machine Learning Application: Under vs. Overdetermined Systems
+
+Why does singularity matter in Machine Learning? It dictates how we fit models to data.
+
+### Underdetermined Systems: Infinite Solutions
+Imagine you want to predict a person's health score. You have **10 features** (heart rate, height, weight, etc.) but only **5 patients** in your database. 
+* This is like having fewer equations than unknowns ($m < n$).
+* Geometrically, this means we have redundant/overlapping equations.
+* There are **infinite combinations of weights** that can fit this small dataset perfectly.
+* **Risk:** The model will easily **overfit** (memorize) the training data but fail on new patients. We prevent this using regularization (like Lasso or Ridge regression).
+
+### Overdetermined Systems: No Solution
+Usually in ML, we have the opposite problem. We have **1,000 observations** (data points) but only **3 features** (unknown parameters). 
+* This is like having more equations than unknowns ($m > n$).
+* Geometrically, this means we have 1,000 lines on a 2D grid. Because of measurement errors and noise in the data, they will never intersect at a single point (No exact solution).
+* **Fix:** Since there is no exact solution, we seek an *approximate* solution. We find a line that minimizes the total distance to all equations. This is called **Ordinary Least Squares (OLS)**!
+
+---
+
+## 4. Check Your Understanding
+
+<Quiz 
+  question="You are training a regression model. If you have 100 training samples and only 2 features, what type of system do you have, and how do we solve it?"
+  options={[
+    { text: "Underdetermined, we solve it by finding the exact intersection point.", isCorrect: false },
+    { text: "Overdetermined, we solve it by finding an approximate solution that minimizes the total prediction error (like Least Squares).", isCorrect: true },
+    { text: "Non-singular, it has exactly one unique solution that fits all 100 points perfectly.", isCorrect: false },
+    { text: "Singular with infinite solutions, so we cannot train the model.", isCorrect: false }
+  ]}
+  explanation="With 100 samples and 2 features, we have many more equations than variables (m > n), making it an overdetermined system. Because of noise in real data, no single line can cross all 100 points perfectly. We use approximation techniques (like Ordinary Least Squares) to find the line that minimizes total error."
+/>

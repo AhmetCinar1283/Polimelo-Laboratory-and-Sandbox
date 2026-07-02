@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { coursesRegistry } from "@/registry/courses";
 import { labsRegistry } from "@/registry/labs";
+import CourseAccordion from "@/components/courses/CourseAccordion";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -51,7 +52,7 @@ export default async function CourseSyllabusPage({ params }: PageProps) {
     );
   }
 
-  // Find lab experiments related to this course
+  // Find lab experiments related to this course (only for legacy layout fallback)
   const relatedLabs = labsRegistry.filter(lab => 
     lab.referencedLectures.some(lecture => lecture.courseId === courseId)
   );
@@ -118,53 +119,57 @@ export default async function CourseSyllabusPage({ params }: PageProps) {
             Syllabus Chronological Outline
           </h2>
 
-          <div className="border-l-2 border-neutral-800 pl-6 flex flex-col gap-9 relative">
-            {course.lectures.map((lecture) => (
-              <div 
-                key={lecture.slug}
-                className="transition-all duration-200 border-l-4 border-transparent hover:border-neutral-800 hover:bg-neutral-100 ml-[-29px] pl-[25px] relative py-2.5"
-              >
-                {/* Timeline node bullet */}
-                <div className="absolute left-[-6px] top-6 w-2.5 h-2.5 bg-neutral-800 border-2 border-background rounded-full" />
+          {course.sections && course.sections.length > 0 ? (
+            <CourseAccordion course={course} />
+          ) : (
+            <div className="border-l-2 border-neutral-800 pl-6 flex flex-col gap-9 relative">
+              {course.lectures.map((lecture) => (
+                <div 
+                  key={lecture.slug}
+                  className="transition-all duration-200 border-l-4 border-transparent hover:border-neutral-800 hover:bg-neutral-100 ml-[-29px] pl-[25px] relative py-2.5"
+                >
+                  {/* Timeline node bullet */}
+                  <div className="absolute left-[-6px] top-6 w-2.5 h-2.5 bg-neutral-800 border-2 border-background rounded-full" />
 
-                {/* Lecture Meta */}
-                <div className="flex items-center text-xs font-bold text-neutral-500 mb-1.5 font-mono">
-                  <span className="mr-3 bg-neutral-800 text-background px-1.5 py-0.5">
-                    {lecture.code}
-                  </span>
-                  <span className="mr-3">
-                    {lecture.difficulty.toUpperCase()}
-                  </span>
-                  <span>
-                    {lecture.duration}
-                  </span>
+                  {/* Lecture Meta */}
+                  <div className="flex items-center text-xs font-bold text-neutral-500 mb-1.5 font-mono">
+                    <span className="mr-3 bg-neutral-800 text-background px-1.5 py-0.5">
+                      {lecture.code}
+                    </span>
+                    <span className="mr-3">
+                      {lecture.difficulty.toUpperCase()}
+                    </span>
+                    <span>
+                      {lecture.duration}
+                    </span>
+                  </div>
+
+                  {/* Lecture Title */}
+                  <h3 className="m-0 mb-2 text-xl text-neutral-800 font-serif font-bold">
+                    {lecture.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-neutral-700 text-sm mb-4 font-sans">
+                    {lecture.description}
+                  </p>
+
+                  {/* Link */}
+                  <Link href={`/courses/${course.id}/${lecture.slug}`} className="text-decoration-none">
+                    <button 
+                      className="transition-all duration-200 border border-neutral-800 px-3.5 py-1.5 bg-neutral-800 text-background hover:bg-background hover:text-neutral-800 font-bold font-mono text-xs cursor-pointer"
+                    >
+                      OPEN_LECTURE() →
+                    </button>
+                  </Link>
                 </div>
-
-                {/* Lecture Title */}
-                <h3 className="m-0 mb-2 text-xl text-neutral-800 font-serif font-bold">
-                  {lecture.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-neutral-700 text-sm mb-4 font-sans">
-                  {lecture.description}
-                </p>
-
-                {/* Link */}
-                <Link href={`/courses/${course.id}/${lecture.slug}`} className="text-decoration-none">
-                  <button 
-                    className="transition-all duration-200 border border-neutral-800 px-3.5 py-1.5 bg-neutral-800 text-background hover:bg-background hover:text-neutral-800 font-bold font-mono text-xs cursor-pointer"
-                  >
-                    OPEN_LECTURE() →
-                  </button>
-                </Link>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Linked Experiments Section */}
-        {relatedLabs.length > 0 && (
+        {/* Linked Experiments Section (Only for legacy courses without sections) */}
+        {!course.sections && relatedLabs.length > 0 && (
           <section className="mt-16 border-t-2 border-neutral-800 pt-8">
             <h2 className="text-xs uppercase tracking-widest text-neutral-500 mb-5 font-bold">
               🔬 Linked Computational Sandbox Experiments

@@ -1,0 +1,23 @@
+# Restructure Laboratory Checklist
+
+- [x] Create Shared Components
+  - [x] `components/shared/Callout.tsx`
+  - [x] `components/shared/Quiz.tsx`
+  - [x] `components/shared/index.ts`
+- [x] Create Course-Specific Components
+  - [x] `components/courses/linear-algebra-for-ml/LineChart.tsx`
+  - [x] `components/courses/linear-algebra-for-ml/MatrixVisualizer.tsx`
+  - [x] `components/courses/linear-algebra-for-ml/index.ts`
+- [x] Remove Monolithic Components File
+  - [x] Delete `components/math-learning.tsx`
+- [x] Expose Shared Components Globally
+  - [x] Update `mdx-components.tsx`
+- [x] Restructure Registry Files
+  - [x] Create `registry/courses/linear-algebra-for-ml.ts` (renamed from `LA-for-ML.ts`)
+  - [x] Create `registry/courses/neural-networks.ts`
+  - [x] Update `registry/courses.ts`
+  - [x] Update `registry/labs.ts`
+- [x] Update Content File
+  - [x] Modify `content/courses/linear-algebra-for-ml/linear-equations-and-singularity.mdx`
+- [x] Build & Verify
+  - [x] Run `npm run build`

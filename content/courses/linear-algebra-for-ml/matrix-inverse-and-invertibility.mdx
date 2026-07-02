@@ -1,0 +1,82 @@
+import { LinearTransformationVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 4.3 Matrix Inverse & Invertibility
+
+In algebra, we divide numbers to solve equations. For example, if $5x = 20$, we multiply both sides by the reciprocal (the inverse) of $5$, which is $\frac{1}{5}$ or $5^{-1}$, to get $x = 4$.
+
+In matrix algebra, **we cannot divide matrices**. Instead, we multiply by the **Matrix Inverse**, denoted as **$A^{-1}$**. Let's learn how to "undo" transformations and understand when a matrix can be inverted.
+
+---
+
+## 1. What is a Matrix Inverse?
+
+The inverse of a square matrix $A$ is a new matrix $A^{-1}$ that satisfies the following property:
+
+$$A \cdot A^{-1} = I$$
+$$A^{-1} \cdot A = I$$
+
+Where $I$ is the Identity matrix (which does nothing). Multiplying a matrix by its inverse is the matrix equivalent of dividing a number by itself to get $1$.
+
+---
+
+## 2. Geometric Intuition: Undoing a Transformation
+
+Think of a matrix $A$ as a physical action that moves basis vectors. The inverse matrix $A^{-1}$ is the action that **reverses** or **undoes** it:
+
+* If matrix $A$ **rotates** the grid $30^\circ$ counter-clockwise, then $A^{-1}$ **rotates** the grid $30^\circ$ clockwise.
+* If matrix $A$ **stretches** the grid by a factor of $2$, then $A^{-1}$ **shrinks** the grid by a factor of $0.5$.
+
+Applying $A$ followed by $A^{-1}$ returns every vector in space to its original starting position.
+
+---
+
+## 3. Invertibility Conditions (When does an inverse exist?)
+
+Only square matrices can have an inverse. However, not all square matrices are invertible! A matrix is invertible only if:
+
+$$\det(A) \neq 0$$
+
+If $\det(A) = 0$, the matrix is **singular** (non-invertible).
+
+### Why Singular Matrices Cannot Be Inverted
+Geometrically, a determinant of $0$ means the matrix collapses the entire 2D space down onto a flat 1D line or point. 
+
+Imagine you take a 3D coordinate model of a teapot and squish it completely flat onto a 2D shadow. If I give you the flat shadow, you cannot reconstruct the original 3D coordinates because information about depth is lost forever. 
+
+Because space is collapsed and information is lost, it is **physically impossible to undo** the transformation. Therefore, singular matrices have no inverse.
+
+---
+
+## 4. Interactive Transformation Workspace
+
+Use the sliders to experiment. Load the **Collapse (Singular)** preset. Notice how the space collapses to a single diagonal line and the determinant becomes **$0$**. Read the analysis panel showing why it is non-invertible.
+
+<LinearTransformationVisualizer />
+
+---
+
+## 5. Solving Systems of Equations using Inverses
+
+If we have a system of equations $A\mathbf{x} = \mathbf{b}$, and $A$ is non-singular, we can solve it algebraically by multiplying both sides by $A^{-1}$:
+
+$$A\mathbf{x} = \mathbf{b}$$
+$$A^{-1} A \mathbf{x} = A^{-1} \mathbf{b}$$
+$$I \mathbf{x} = A^{-1} \mathbf{b}$$
+$$\mathbf{x} = A^{-1} \mathbf{b}$$
+
+This is the standard algebraic formulation for finding solutions in machine learning models!
+
+---
+
+## 6. Check Your Understanding
+
+<Quiz 
+  question="Why can we not solve the system Ax = b by computing x = A⁻¹b if the determinant of A is exactly 0?"
+  options={[
+    { text: "Because a determinant of 0 means the matrix is singular and has no inverse; space has collapsed and we cannot reconstruct the original inputs.", isCorrect: true },
+    { text: "Because matrix multiplication does not allow multiplying a vector by an inverse.", isCorrect: false },
+    { text: "Because we must use transposition instead of inversion.", isCorrect: false },
+    { text: "Because the solution vector x would become 0.", isCorrect: false }
+  ]}
+  explanation="A determinant of 0 indicates that the matrix is singular. The transformation squished the coordinate space into a lower dimension, losing information. Because the operation is not unique or reversible, A⁻¹ does not exist, and we cannot compute x = A⁻¹b."
+/>

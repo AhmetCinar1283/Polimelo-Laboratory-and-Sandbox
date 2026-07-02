@@ -1,0 +1,76 @@
+import { LinearTransformationVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 3.3 The Determinant as a System Diagnostics Tool
+
+When dealing with a system of equations $A\mathbf{x} = \mathbf{b}$, how can we quickly diagnose whether the system has a single unique solution, or if it is singular (unsolvable)? 
+
+We compute a single scalar value called the **Determinant**. In this lecture, we will study the geometric definition of the determinant, learn how to calculate it, and see how it works as a diagnostics tool for singularity.
+
+---
+
+## 1. What is the Determinant? (Geometric View)
+
+Imagine the unit square in 2D space formed by the standard basis vectors $\hat{i} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ and $\hat{j} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$. This square has an area of exactly **$1$**.
+
+When we multiply these basis vectors by a matrix $A$, they distort into new vectors, forming a parallelogram. 
+
+The **determinant** of matrix $A$ (written as $\det(A)$ or $|A|$) is the **scaling factor of this area** under the transformation:
+
+* **$\det(A) = 2$:** The transformation doubles the area (the parallelogram has an area of $2$).
+* **$\det(A) = 0.5$:** The area is cut in half.
+* **$\det(A) < 0$ (Negative):** The area is scaled, but the space has been **flipped** (reflected like a mirror image).
+* **$\det(A) = 0$:** The space is completely **squished** into a lower dimension (a 2D plane squished into a 1D line). The area of the parallelogram collapses to **$0$**!
+
+---
+
+## 2. Interactive Transformation & Determinant Workspace
+
+Play with the sliders below. Notice how the determinant changes as you stretch and shear the space. Observe what happens to the grid and the parallelogram when the determinant reaches **$0$** (preset: **Collapse**).
+
+<LinearTransformationVisualizer />
+
+---
+
+## 3. How to Calculate the Determinant
+
+### For a $2 \times 2$ Matrix:
+$$\det \begin{bmatrix} a & b \\ c & d \end{bmatrix} = ad - bc$$
+
+* **Example:** For matrix $A = \begin{bmatrix} 3 & 1 \\ 2 & 4 \end{bmatrix}$:
+  $$\det(A) = (3 \times 4) - (1 \times 2) = 12 - 2 = 10$$
+
+### For a $3 \times 3$ Matrix:
+We calculate a $3 \times 3$ determinant by breaking it down into smaller $2 \times 2$ parts (a process called **Laplace Expansion**):
+
+$$\det \begin{bmatrix} a & b & c \\ d & e & f \\ g & h & i \end{bmatrix} = a \det \begin{bmatrix} e & f \\ h & i \end{bmatrix} - b \det \begin{bmatrix} d & f \\ g & i \end{bmatrix} + c \det \begin{bmatrix} d & e \\ g & h \end{bmatrix}$$
+
+$$\det(A) = a(ei - fh) - b(di - fg) + c(dh - eg)$$
+
+---
+
+## 4. The Diagnostic Rule: Singular vs. Non-Singular
+
+The determinant is the ultimate quick diagnostic test for a matrix:
+
+$$\det(A) = 0 \iff \text{Matrix is Singular (No Unique Solution)}$$
+$$\det(A) \neq 0 \iff \text{Matrix is Non-Singular (One Unique Solution)}$$
+
+### Why does a determinant of 0 mean we cannot solve the system?
+Think of it like regular algebra. Multiplying a number by $0$ collapses it to $0$. You cannot undo this operation because you cannot divide by $0$. 
+
+Similarly, if a matrix has a determinant of $0$, it squishes the entire coordinate space down onto a flat line or point. Because information has been collapsed and lost, we **cannot reconstruct** the original coordinates. The matrix has no inverse, and the system is singular.
+
+---
+
+## 5. Check Your Understanding
+
+<Quiz 
+  question="You compute the determinant of a 2 x 2 matrix representing a system of equations, and the result is exactly 0. What does this tell you about the geometry of the system?"
+  options={[
+    { text: "The two lines intersect at exactly one point.", isCorrect: false },
+    { text: "The two lines are parallel or overlap, meaning the space has collapsed into a 1D line and the matrix has no inverse.", isCorrect: true },
+    { text: "The area of the unit square has doubled under the transformation.", isCorrect: false },
+    { text: "The orientation of the grid is flipped, but it has a unique solution.", isCorrect: false }
+  ]}
+  explanation="A determinant of 0 means the transformed area of the unit square is 0. This implies the grid has collapsed from 2D space into a 1D line (where the two lines are parallel or overlap), making the matrix singular (non-invertible) and leaving the system without a unique solution."
+/>

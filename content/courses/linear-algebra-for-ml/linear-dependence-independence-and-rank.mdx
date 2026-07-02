@@ -1,0 +1,106 @@
+# 3.2 Linear Dependence, Independence, and Matrix Rank
+
+In machine learning, we feed datasets containing many features (variables) into our algorithms. But what if some of these features are redundant? What if two features tell us the exact same thing? 
+
+In this lecture, we will study **Linear Independence** and **Matrix Rank**—two critical diagnostic tools that help us detect hidden redundancies in our data matrices.
+
+---
+
+## 1. Linear Combinations & Span
+
+Before we can define independence, we must understand how vectors combine to cover space.
+
+### Linear Combinations
+A **linear combination** of a set of vectors $\{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_n\}$ is a new vector obtained by scaling each vector and adding them together:
+
+$$\mathbf{w} = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_n \mathbf{v}_n$$
+
+* **Example:** Let $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$ and $\mathbf{v}_2 = \begin{bmatrix} 3 \\ 0 \end{bmatrix}$. If we choose scalars $c_1 = 2$ and $c_2 = -1$:
+  $$\mathbf{w} = 2\begin{bmatrix} 1 \\ 2 \end{bmatrix} - 1\begin{bmatrix} 3 \\ 0 \end{bmatrix} = \begin{bmatrix} 2 - 3 \\ 4 - 0 \end{bmatrix} = \begin{bmatrix} -1 \\ 4 \end{bmatrix}$$
+
+### The Span
+The **Span** of a set of vectors is the set of **all possible linear combinations** you can create from them. Geometrically:
+* **Span of one vector:** A 1D line passing through the origin.
+* **Span of two vectors in 3D:** If they don't point in the same direction, they span a 2D flat plane.
+* **Span of three vectors in 3D:** If they don't lie in the same plane, they span the entire 3D space.
+
+---
+
+## 2. Linear Independence vs. Dependence
+
+How do we know if a new vector adds a "new direction" to our span, or if it is redundant?
+
+### Linear Independence
+A set of vectors is **linearly independent** if no vector in the set can be written as a combination of the others. Every vector provides completely new, unique spatial information.
+
+Mathematically, the equation:
+$$c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_n \mathbf{v}_n = \mathbf{0}$$
+has **only** the trivial solution $c_1 = c_2 = \dots = c_n = 0$.
+
+### Linear Dependence
+If at least one vector in the set can be written as a linear combination of the others, the set is **linearly dependent**. Adding a dependent vector to our set **does not expand the Span**.
+
+* **Example:** If $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$, $\mathbf{v}_2 = \begin{bmatrix} 2 \\ 4 \end{bmatrix}$, and $\mathbf{v}_3 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$.
+  Here, $\mathbf{v}_2 = 2\mathbf{v}_1$. The vector $\mathbf{v}_2$ lies along the same line as $\mathbf{v}_1$. It adds no new direction, so the set is dependent.
+
+```
+       Linearly Independent                       Linearly Dependent
+   (Vectors point in new directions)          (One vector is redundant)
+               ▲                                          ▲
+               │  v2                                      │  v2
+               │                                          │ ╱
+               ┼─────►                                    ┼─╱───►
+                v1                                         v1  v3 (redundant)
+```
+
+---
+
+## 3. Machine Learning Connection: Multicollinearity
+
+In statistics and machine learning, linear dependence in a feature matrix is called **Multicollinearity**.
+
+Imagine you are predicting house prices using features:
+1. $x_1$: Area in square feet.
+2. $x_2$: Area in square meters ($x_2 \approx 0.0929 \times x_1$).
+3. $x_3$: Number of bedrooms.
+
+Because $x_2$ is a direct linear combination of $x_1$, their columns in the data matrix are **linearly dependent**. 
+
+If you feed this matrix into a linear regression model, the covariance matrix $X^T X$ becomes **singular** (non-invertible), causing the training algorithm to crash or output wildly unstable, meaningless weights! We must drop one of the redundant features to make the columns independent.
+
+---
+
+## 4. Matrix Rank
+
+The **Rank** of a matrix is the total number of **linearly independent rows or columns** in that matrix. It tells us the actual dimension of the space spanned by the matrix.
+
+### How to Calculate Rank using RREF
+To find the rank of a matrix:
+1. Perform Gaussian elimination to convert the matrix into **Reduced Row Echelon Form (RREF)**.
+2. Count the number of **pivots** (non-zero rows). This count is exactly the Rank of the matrix!
+
+* **Example:** Let's look at matrix $A$:
+  $$A = \begin{bmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 0 & 1 & 1 \end{bmatrix}$$
+  * Notice that the second row is just $2 \times \text{Row 1}$ (it is dependent).
+  * If we perform row operations to get RREF, the second row collapses to all zeros:
+    $$\text{RREF}(A) = \begin{bmatrix} 1 & 0 & 1 \\ 0 & 1 & 1 \\ 0 & 0 & 0 \end{bmatrix}$$
+  * There are only **2 pivots** (non-zero rows). Therefore, **Rank(A) = 2**. Even though $A$ is a $3 \times 3$ matrix, it only contains 2 dimensions of unique information.
+
+### Full Rank vs. Rank Deficient
+* **Full Rank:** An $n \times n$ square matrix is **Full Rank** if its rank is exactly $n$. This means all rows/columns are independent, and the system is fully solvable.
+* **Rank Deficient:** If its rank is less than $n$ (Rank $< n$), the matrix is singular and cannot be inverted.
+
+---
+
+## 5. Check Your Understanding
+
+<Quiz 
+  question="You have a 3 x 3 feature matrix. After performing Gaussian elimination, you find that the RREF of the matrix has 3 non-zero rows (3 pivots). What is the Rank of this matrix, and is it singular?"
+  options={[
+    { text: "Rank is 3; it is Full Rank and Non-Singular (invertible).", isCorrect: true },
+    { text: "Rank is 3; it is Rank Deficient and Singular.", isCorrect: false },
+    { text: "Rank is 2; it is Singular because it has no zero rows.", isCorrect: false },
+    { text: "Rank is 0; it is Singular.", isCorrect: false }
+  ]}
+  explanation="Since there are 3 pivots in a 3 x 3 matrix, the rank is 3. This matches its size, making it a Full Rank matrix. A Full Rank square matrix has no redundant rows/columns, meaning it is non-singular and fully invertible."
+/>

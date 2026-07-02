@@ -1,0 +1,95 @@
+# 4.4 Neural Networks and Matrices (Bridging to ML)
+
+Congratulations on reaching the final lecture of this course! Now, let's tie together everything we have learned—vectors, norms, dot products, matrices, and linear transformations—and see how they form the core engine of **Deep Learning**.
+
+Every time a neural network makes a prediction, it is performing matrix operations behind the scenes. Let's see how.
+
+---
+
+## 1. The Anatomy of a Single Neuron
+
+A single neuron in a neural network takes several input features ($\mathbf{x}$), multiplies them by their corresponding weights ($\mathbf{w}$), adds a bias ($b$), and computes an output ($z$):
+
+$$z = w_1 x_1 + w_2 x_2 + \dots + w_n x_n + b$$
+
+Does this formula look familiar? It is exactly the multi-feature linear equation we saw in Module 2! We can write this compactly using the **dot product** of the weight vector $\mathbf{w}$ and input vector $\mathbf{x}$:
+
+$$z = \mathbf{w}^T \mathbf{x} + b$$
+
+---
+
+## 2. Stacking Neurons: The Matrix Representation
+
+A real neural network layer doesn't just have one neuron; it has many. Suppose we have:
+* **3 input features** ($x_1, x_2, x_3$).
+* **2 neurons** in our layer, outputting $z_1$ and $z_2$.
+
+```
+         Inputs (x)         Weights (W)         Neurons (z)
+          ┌───┐                                   ┌───┐
+          │ x1│ ───────── w11, w12 ─────────────► │ z1│
+          ├───┤                                   ├───┤
+          │ x2│ ───────── w21, w22 ─────────────► │ z2│
+          ├───┤                                   └───┘
+          │ x3│ ───────── w31, w32 ───────────────┘
+          └───┘
+```
+
+Each neuron has its own set of weights:
+* Neuron 1: $z_1 = w_{11}x_1 + w_{12}x_2 + w_{13}x_3 + b_1$
+* Neuron 2: $z_2 = w_{21}x_1 + w_{22}x_2 + w_{23}x_3 + b_2$
+
+Instead of writing these equations separately, we pack all weights into a single **Weight Matrix ($W$)**, all inputs into a vector $\mathbf{x}$, and all biases into a vector $\mathbf{b}$:
+
+$$W = \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}$$
+
+We can calculate the outputs of all neurons in the layer simultaneously using a single matrix equation:
+
+$$\mathbf{z} = W\mathbf{x} + \mathbf{b}$$
+
+Let's verify using our row-by-column multiplication:
+$$\mathbf{z} = \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} + \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} (w_{11}x_1 + w_{12}x_2 + w_{13}x_3) + b_1 \\ (w_{21}x_1 + w_{22}x_2 + w_{23}x_3) + b_2 \end{bmatrix} = \begin{bmatrix} z_1 \\ z_2 \end{bmatrix}$$
+
+This is the exact formula for a fully-connected (dense) neural network layer!
+
+---
+
+## 3. Geometric View: Bending Space
+
+What is a neural network actually doing to our data geometrically?
+
+1. **Matrix Multiplication ($W\mathbf{x}$):** The weight matrix acts as a **Linear Transformation**. It rotates, stretches, and projects our input data from a 3D feature space down to a new 2D feature space.
+2. **Bias Addition ($+\mathbf{b}$):** The bias vector acts as a **Translation** (it shifts the entire coordinate space in a specific direction).
+3. **Activation Function ($a = \sigma(\mathbf{z})$):** Finally, we pass the coordinates through a non-linear function (like ReLU). This bends and warps the space non-linearly.
+
+By repeating this process layer-after-layer, the neural network stretches and bends the coordinate space until the data points become easily separable (e.g., separating cat pictures from dog pictures using a straight dividing line in the final transformed space!).
+
+---
+
+## 4. Summary of Your Journey
+
+You have mastered the foundational tools of linear algebra:
+* **Vectors:** Storing data features and coordinates.
+* **Norms:** Measuring error magnitudes.
+* **Dot Products:** Calculating similarity and projections.
+* **Gaussian Elimination:** Solving equations systematically.
+* **Determinants:** Tracking space scaling and singularity.
+* **Matrix Inverses:** Undoing transformations and solving systems.
+* **Neural Layers:** Transforming representation spaces using $W\mathbf{x} + \mathbf{b}$.
+
+These simple operations, executed billions of times per second, are what power all modern artificial intelligence!
+
+---
+
+## 5. Check Your Understanding
+
+<Quiz 
+  question="A neural network layer has 5 inputs and 10 neurons. What is the size of the weight matrix W for this layer (using the formula z = Wx + b)?"
+  options={[
+    { text: "Size (10 x 5), because the matrix must map 5 inputs to 10 neuron outputs.", isCorrect: true },
+    { text: "Size (5 x 10), because we have 5 inputs.", isCorrect: false },
+    { text: "Size (10 x 1), because there are 10 neurons.", isCorrect: false },
+    { text: "Size (5 x 5), because it must be a square matrix.", isCorrect: false }
+  ]}
+  explanation="In the layer equation z = Wx + b, the input vector x is of size (5 x 1) and the output vector z is of size (10 x 1). To make the matrix-vector multiplication work, the weight matrix W must have dimensions (10 x 5) so that (10 x 5) * (5 x 1) results in a (10 x 1) vector."
+/>

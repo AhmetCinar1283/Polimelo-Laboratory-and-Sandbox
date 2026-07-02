@@ -1,0 +1,101 @@
+import { VectorVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 1.1 Introduction to Vectors & Vector Operations
+
+Welcome to the beginning of your linear algebra journey for Machine Learning! In this lecture, we will explore the absolute fundamental building block of all data science and AI algorithms: **the Vector**. 
+
+If you have ever worked with tables of data, you have already used vectors without realizing it. Let's demystify what a vector actually is and how we perform basic operations on it.
+
+---
+
+## 1. What is a Vector?
+
+A vector can be understood through two main perspectives: the **Algebraic View** (the language of computer science and statistics) and the **Geometric View** (the language of physics and spatial visualization).
+
+### The Algebraic View: A List of Numbers
+To a computer scientist or machine learning engineer, a vector is simply an ordered list of numbers. Each number in the list represents a specific feature or measurement of an object.
+
+* **Example:** Imagine you are building an algorithm to predict house prices. For a single house, you collect:
+  1. Size: $120 \text{ m}^2$
+  2. Number of bedrooms: $3$
+  3. Distance to city center: $5 \text{ km}$
+
+  We can group these numbers into a column vector, which we usually denote with a bold lowercase letter like $\mathbf{x}$:
+  
+  $$\mathbf{x} = \begin{bmatrix} 120 \\ 3 \\ 5 \end{bmatrix}$$
+
+  This is a 3-dimensional vector because it contains 3 distinct measurements.
+
+### The Geometric View: An Arrow in Space
+Geometrically, a vector is an arrow starting from a reference point (usually the origin $[0,0]$ in a coordinate system) and pointing to a specific coordinate.
+
+* The **length** of the arrow represents the magnitude (size).
+* The **direction** of the arrow shows where it is pointing.
+
+For instance, a 2D vector $\mathbf{v} = \begin{bmatrix} 3 \\ 2 \end{bmatrix}$ represents an arrow starting at $[0, 0]$ and pointing to the coordinate $(3, 2)$ on a grid.
+
+---
+
+## 2. Key Vector Operations
+
+To use vectors in machine learning, we need to perform math operations on them. The two most fundamental operations are **Vector Addition** and **Scalar Multiplication**.
+
+### Vector Addition: Combining Vectors
+When we add two vectors of the same dimension, we add their corresponding elements one by one.
+
+$$\mathbf{a} + \mathbf{b} = \begin{bmatrix} a_1 \\ a_2 \end{bmatrix} + \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 + b_1 \\ a_2 + b_2 \end{bmatrix}$$
+
+* **Example:** If $\mathbf{a} = \begin{bmatrix} 3 \\ 2 \end{bmatrix}$ and $\mathbf{b} = \begin{bmatrix} -1 \\ 3 \end{bmatrix}$, then:
+  $$\mathbf{a} + \mathbf{b} = \begin{bmatrix} 3 + (-1) \\ 2 + 3 \end{bmatrix} = \begin{bmatrix} 2 \\ 5 \end{bmatrix}$$
+
+#### Geometric Interpretation: The "Tip-to-Tail" Method
+To visualize addition:
+1. Start at the origin and draw the first vector $\mathbf{a}$.
+2. Take the second vector $\mathbf{b}$ and place its starting point (tail) at the tip of vector $\mathbf{a}$.
+3. Draw a new arrow from the origin straight to the tip of vector $\mathbf{b}$. This new arrow is the resulting vector $\mathbf{a} + \mathbf{b}$.
+
+---
+
+### Vector Subtraction: Finding the Difference
+Vector subtraction works similarly to addition, but we subtract the corresponding elements.
+
+$$\mathbf{a} - \mathbf{b} = \begin{bmatrix} a_1 \\ a_2 \end{bmatrix} - \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 - b_1 \\ a_2 - b_2 \end{bmatrix}$$
+
+Geometrically, $\mathbf{a} - \mathbf{b}$ can be visualized as adding the negative of $\mathbf{b}$ to $\mathbf{a}$:
+$$\mathbf{a} - \mathbf{b} = \mathbf{a} + (-\mathbf{b})$$
+
+The resulting vector represents the path **from the tip of $\mathbf{b}$ to the tip of $\mathbf{a}$**.
+
+---
+
+### Scalar Multiplication: Scaling Space
+A **scalar** is a single real number (like $2$, $0.5$, or $-1$). When we multiply a vector by a scalar, we multiply every element in the vector by that number.
+
+$$c \cdot \mathbf{v} = c \cdot \begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \begin{bmatrix} c \cdot v_1 \\ c \cdot v_2 \end{bmatrix}$$
+
+* **If $c > 1$:** The vector stretches (grows longer).
+* **If $0 < c < 1$:** The vector shrinks (gets shorter).
+* **If $c < 0$ (Negative):** The vector reverses direction and points the opposite way.
+
+---
+
+## 3. Hands-on Experiment
+
+Try out vector operations yourself using the interactive sandbox below. Switch between **ADD**, **SUB**, and **SCALE** using the controls, and adjust the coordinates of the vectors to see how the mathematical formulas and geometric arrows change in real-time.
+
+<VectorVisualizer />
+
+---
+
+## 4. Check Your Understanding
+
+<Quiz 
+  question="If you have vector A = [2, 4] and you perform scalar multiplication with c = -0.5, what are the components of the new vector, and how does its direction change?"
+  options={[
+    { text: "The new vector is [-1, -2] and it points in the opposite direction.", isCorrect: true },
+    { text: "The new vector is [1, 2] and it points in the same direction.", isCorrect: false },
+    { text: "The new vector is [-1, -2] and it points in the same direction.", isCorrect: false },
+    { text: "The new vector is [-4, -8] and it points in the opposite direction.", isCorrect: false }
+  ]}
+  explanation="Multiplying [2, 4] by -0.5 results in [2 * -0.5, 4 * -0.5] = [-1, -2]. Because the scalar multiplier is negative, the direction of the vector is flipped exactly 180 degrees."
+/>

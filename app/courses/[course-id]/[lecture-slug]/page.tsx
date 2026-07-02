@@ -111,6 +111,11 @@ export default async function LectureDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `localStorage.setItem('last-visited-item:${courseId}', 'lecture:${lectureSlug}')`
+        }}
+      />
       <div className="max-w-[1150px] mx-auto animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-12 items-start">
           

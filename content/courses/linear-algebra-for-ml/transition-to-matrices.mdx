@@ -1,0 +1,103 @@
+import { MatrixVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 2.3 Transition to Matrices
+
+Up to now, we have written out our equations line-by-line using variables like $x$ and $y$. But in machine learning, we deal with millions of data points and features. Writing out equations by hand is impossible! 
+
+To handle large-scale data, we pack our numbers into grids called **Matrices**. In this lecture, we will learn how to rewrite systems of equations in matrix form ($A\mathbf{x} = \mathbf{b}$) and master the core rules of **Matrix Multiplication**.
+
+---
+
+## 1. Moving from Equations to Matrices ($A\mathbf{x} = \mathbf{b}$)
+
+Let's take a standard system of linear equations:
+
+$$2x_1 + 3x_2 = 12$$
+$$x_1 - 2x_2 = -1$$
+
+We can separate this system into three compact parts:
+1. **$A$ (Coefficient Matrix):** A grid containing only the coefficients (the numbers in front of the variables).
+   $$A = \begin{bmatrix} 2 & 3 \\ 1 & -2 \end{bmatrix}$$
+2. **$\mathbf{x}$ (Variable Vector):** A column vector of our unknown variables.
+   $$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$$
+3. **$\mathbf{b}$ (Target Vector):** A column vector containing the answers on the right side of the equals sign.
+   $$\mathbf{b} = \begin{bmatrix} 12 \\ -1 \end{bmatrix}$$
+
+Now, we can write the entire system of equations in a single, elegant line of matrix algebra:
+
+$$A\mathbf{x} = \mathbf{b}$$
+
+---
+
+## 2. Matrix-Vector Multiplication: How It Works
+
+To make sure $A\mathbf{x} = \mathbf{b}$ is actually the same as our original equations, we need to know how to multiply a matrix by a vector.
+
+### The Rule: Row Dot Column
+To multiply a matrix by a vector, we take each **row** of the matrix and compute its **dot product** with the column vector.
+
+$$\begin{bmatrix} 2 & 3 \\ 1 & -2 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} (2 \times x_1) + (3 \times x_2) \\ (1 \times x_1) + (-2 \times x_2) \end{bmatrix} = \begin{bmatrix} 2x_1 + 3x_2 \\ x_1 - 2x_2 \end{bmatrix}$$
+
+This yields a new column vector. Matching this result to our target vector $\mathbf{b} = \begin{bmatrix} 12 \\ -1 \end{bmatrix}$ gives us our original equations back!
+
+---
+
+## 3. Matrix-Matrix Multiplication
+
+In machine learning, we often multiply matrices by other matrices (for example, when passing a batch of inputs through a neural network layer).
+
+Suppose we want to multiply matrix $A$ (size $2 \times 2$) by matrix $B$ (size $2 \times 2$) to get a new matrix $C = AB$:
+
+$$A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}, \quad B = \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix}$$
+
+We calculate each cell in the result matrix $C$ using the **Row-by-Column** rule:
+
+* **Row 1 of A $\times$ Column 1 of B $\implies$ Cell $C_{11}$:**
+  $$(1 \times 5) + (2 \times 7) = 5 + 14 = 19$$
+* **Row 1 of A $\times$ Column 2 of B $\implies$ Cell $C_{12}$:**
+  $$(1 \times 6) + (2 \times 8) = 6 + 16 = 22$$
+* **Row 2 of A $\times$ Column 1 of B $\implies$ Cell $C_{21}$:**
+  $$(3 \times 5) + (4 \times 7) = 15 + 28 = 43$$
+* **Row 2 of A $\times$ Column 2 of B $\implies$ Cell $C_{22}$:**
+  $$(3 \times 6) + (4 \times 8) = 18 + 32 = 50$$
+
+So, our final result is:
+$$AB = \begin{bmatrix} 19 & 22 \\ 43 & 50 \end{bmatrix}$$
+
+> [!WARNING]
+> **Order Matters!** In regular math, $2 \times 3 = 3 \times 2$. But in matrix multiplication, **$AB \neq BA$** in general! Changing the order of multiplication will yield a completely different result, or might even be mathematically impossible because the sizes don't match.
+
+---
+
+## 4. Visualizing Matrices in Code
+
+In machine learning libraries like NumPy or PyTorch, matrices are represented as 2D arrays. Below is a visualization of a coefficients matrix in grid form:
+
+<MatrixVisualizer 
+  matrix={[[2, 3], [1, -2]]} 
+  type="Non-Singular"
+  determinant="-7 (Non-Zero)"
+/>
+
+---
+
+## 5. Master the Calculation in the Lab
+
+To build your mechanical intuition of how rows dot-product with columns step-by-step, go to the computational sandbox:
+
+🔬 [Matrix Multiplication & Vector Space Visualizer](file:///lab/matrix-multiplier)
+
+---
+
+## 6. Check Your Understanding
+
+<Quiz 
+  question="If you multiply matrix A of size (3 x 2) by matrix B of size (2 x 4), what will be the size of the resulting matrix C?"
+  options={[
+    { text: "Size (3 x 4), because the inner dimensions (2) match, and the outer dimensions (3 and 4) determine the shape of the result.", isCorrect: true },
+    { text: "Size (2 x 2), because we only keep the matching dimensions.", isCorrect: false },
+    { text: "Size (3 x 2), because the first matrix dictates the shape.", isCorrect: false },
+    { text: "It is mathematically impossible to multiply them.", isCorrect: false }
+  ]}
+  explanation="To multiply two matrices, the number of columns in the first matrix must equal the number of rows in the second matrix (inner dimensions must match, here 2 = 2). The resulting matrix takes its rows from the first matrix and columns from the second matrix, yielding a (3 x 4) matrix."
+/>

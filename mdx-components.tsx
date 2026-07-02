@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import React from "react";
+import { Callout, Quiz } from "@/components/shared";
 
 interface RefProps {
   lab?: string;
@@ -57,6 +58,8 @@ const Ref: React.FC<RefProps> = ({ lab, course, lecture, label }) => {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     Ref: Ref as any, // Expose globally to MDX files
+    Callout: Callout as any,
+    Quiz: Quiz as any,
     h1: ({ children }) => (
       <h1
         style={{

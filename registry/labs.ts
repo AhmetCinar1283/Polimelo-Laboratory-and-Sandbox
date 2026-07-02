@@ -1,8 +1,10 @@
+import { coursesRegistry } from "./courses";
+
 export interface ReferencedLecture {
   courseId: string;
   lectureSlug: string;
-  lectureTitle: string;
-  code: string;
+  lectureTitle?: string;
+  code?: string;
 }
 
 export interface LabModule {
@@ -14,6 +16,17 @@ export interface LabModule {
   status: "Active" | "Maintenance" | "Experimental";
   link: string;
   referencedLectures: ReferencedLecture[];
+}
+
+export function getResolvedLecture(ref: ReferencedLecture) {
+  const course = coursesRegistry.find(c => c.id === ref.courseId);
+  const lecture = course?.lectures.find(l => l.slug === ref.lectureSlug);
+  return {
+    courseId: ref.courseId,
+    lectureSlug: ref.lectureSlug,
+    lectureTitle: lecture?.title || ref.lectureTitle || "Unknown Lecture",
+    code: lecture?.code || ref.code || "UNKNOWN",
+  };
 }
 
 export const labsRegistry: LabModule[] = [
@@ -37,10 +50,10 @@ export const labsRegistry: LabModule[] = [
     link: "/lab/matrix-multiplier",
     referencedLectures: [
       {
-        courseId: "linear-algebra",
-        lectureSlug: "sparse-matrices",
-        lectureTitle: "Sparse Matrices & CSR Data Representation",
-        code: "MATH-LA-01",
+        courseId: "linear-algebra-for-ml",
+        lectureSlug: "transition-to-matrices",
+        lectureTitle: "2.3 Transition to Matrices",
+        code: "MATH-LA-06",
       }
     ],
   },
@@ -58,6 +71,23 @@ export const labsRegistry: LabModule[] = [
         lectureSlug: "backpropagation",
         lectureTitle: "Backpropagation from First Principles",
         code: "AI-NN-01",
+      }
+    ],
+  },
+  {
+    id: "singularity-sandbox",
+    code: "MODULE-REF: 04D",
+    title: "Singularity & Dimension Sandbox",
+    abstract: "An interactive workspace for testing equations for singularity, computing determinants, and exploring the geometric dimension of solution spaces (kernel, image, and singularity states).",
+    keywords: ["Linear Algebra", "Singularity", "Determinant", "Dimension Space"],
+    status: "Experimental",
+    link: "/lab/singularity-sandbox",
+    referencedLectures: [
+      {
+        courseId: "linear-algebra-for-ml",
+        lectureSlug: "visualizing-singularity-in-systems",
+        lectureTitle: "2.2 Visualizing Singularity in Systems",
+        code: "MATH-LA-05",
       }
     ],
   }

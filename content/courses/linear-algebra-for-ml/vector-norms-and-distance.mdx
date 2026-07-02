@@ -1,0 +1,86 @@
+import { NormVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 1.2 Vector Norms and Distance Metrics
+
+In the previous lecture, we learned that a vector represents a point or direction in space. But how do we measure the **size** of a vector? Or the **distance** between two different vectors? 
+
+In machine learning, measuring sizes and distances is crucial. We use them to calculate predictions errors, select features, and prevent overfitting. In mathematics, we call these size measurements **Norms**.
+
+---
+
+## 1. What is a Vector Norm?
+
+A **norm** is a mathematical function that takes a vector and returns a single positive number representing its "length" or "magnitude". 
+
+There are different ways to define "length" depending on how we measure space. The two most common norms in machine learning are the **$L_1$ Norm** and the **$L_2$ Norm**.
+
+---
+
+## 2. The $L_1$ Norm (Manhattan Distance)
+
+The $L_1$ norm calculates the length of a vector by adding up the absolute values of its components.
+
+$$\|\mathbf{v}\|_1 = |v_1| + |v_2| + \dots + |v_n|$$
+
+### Geometric Intuition: The Taxi Driver
+Imagine you are driving a taxi in Manhattan, New York. Because of the grid-like streets and tall buildings, you cannot drive diagonally (in a straight line) from point A to point B. Instead, you must drive block-by-block—first horizontally, then vertically. 
+
+The total distance you drive is the **Manhattan Distance** ($L_1$ distance).
+
+* **Example:** If you want to measure the $L_1$ norm of vector $\mathbf{v} = \begin{bmatrix} 4 \\ -3 \end{bmatrix}$:
+  $$\|\mathbf{v}\|_1 = |4| + |-3| = 4 + 3 = 7$$
+
+---
+
+## 3. The $L_2$ Norm (Euclidean Distance)
+
+The $L_2$ norm is the standard "straight-line" distance that we are all familiar with from high school geometry (the Pythagorean theorem). It squares each component, adds them up, and takes the square root.
+
+$$\|\mathbf{v}\|_2 = \sqrt{v_1^2 + v_2^2 + \dots + v_n^2}$$
+
+### Geometric Intuition: The Flying Bird
+Unlike the taxi driver, a bird can fly directly in a straight line from origin to its destination, ignoring streets and buildings. This direct distance is the **Euclidean Distance** ($L_2$ distance).
+
+* **Example:** For the same vector $\mathbf{v} = \begin{bmatrix} 4 \\ -3 \end{bmatrix}$:
+  $$\|\mathbf{v}\|_2 = \sqrt{4^2 + (-3)^2} = \sqrt{16 + 9} = \sqrt{25} = 5$$
+
+Notice that the straight-line distance ($5$) is shorter than the grid-like distance ($7$). Geometrically, the $L_2$ norm of a vector is always less than or equal to its $L_1$ norm.
+
+---
+
+## 4. Hands-on Experiment
+
+Use the interactive widget below to see how $L_1$ and $L_2$ norms behave. Adjust the $X$ and $Y$ coordinates of the point. Notice how the dashed red lines ($L_1$) and solid blue line ($L_2$) adapt, and look at the mathematical computations update.
+
+<NormVisualizer />
+
+---
+
+## 5. Machine Learning Connections
+
+Why do we need both norms in Machine Learning? They behave differently, and we choose one or the other based on the problem.
+
+### I. Loss Functions (Error Measurement)
+When training a model, we want to minimize the difference (distance) between our predictions ($\hat{y}$) and actual targets ($y$).
+* **Mean Absolute Error (MAE):** Uses the $L_1$ distance. Because it treats errors linearly, it is **robust to outliers** (it doesn't get overly disturbed by a few extremely wrong data points).
+* **Mean Squared Error (MSE):** Uses the square of the $L_2$ distance. Because it squares the errors, **large errors are penalized much more heavily** than small ones. It is very sensitive to outliers.
+
+### II. Regularization (Preventing Overfitting)
+To prevent models from becoming too complex, we penalize large weights.
+* **$L_1$ Regularization (Lasso):** Penalizes the sum of absolute weights. This forces many weights to become **exactly zero**, which automatically selects the most important features and discards the rest (creates a *sparse* model).
+* **$L_2$ Regularization (Ridge):** Penalizes the sum of squared weights. This forces weights to be **small but non-zero**, distributing the influence across features smoothly and stabilizing the model.
+
+---
+
+## 6. Check Your Understanding
+
+<Quiz 
+  question="You are training a model to predict house prices, but your dataset contains a lot of incorrect data points (outliers) due to typing errors. Which error metric (loss function) would be more robust to prevent these outliers from ruining your model's accuracy?"
+  options={[
+    { text: "Mean Squared Error (MSE, L2-based), because it ignores small errors.", isCorrect: false },
+    { text: "Mean Absolute Error (MAE, L1-based), because it treats all errors linearly and is less sensitive to extreme outliers.", isCorrect: true },
+    { text: "Both will behave identically regardless of outliers.", isCorrect: false },
+    { text: "Neither, norms cannot be used to measure errors.", isCorrect: false }
+  ]}
+  explanation="L1-based MAE is robust to outliers because it takes absolute differences linearly. In contrast, L2-based MSE squares the differences, meaning a single massive outlier will produce an enormous penalty and pull the model heavily towards it."
+/>

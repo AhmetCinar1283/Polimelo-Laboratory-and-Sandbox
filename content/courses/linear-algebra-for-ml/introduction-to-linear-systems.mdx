@@ -1,0 +1,90 @@
+import { LineChart } from '@/components/courses/linear-algebra-for-ml'
+
+# 2.1 Introduction to Linear Systems
+
+Now that we understand vectors, we can scale up to look at systems of multiple equations. In machine learning, we are almost always dealing with relationships between variables. The simplest relationship is a **linear relationship**. 
+
+In this lecture, we will learn what a linear system of equations is, how to solve small systems manually, and why this is the foundational concept behind one of the oldest and most widely used machine learning algorithms: **Linear Regression**.
+
+---
+
+## 1. What is a Linear System?
+
+A **system of linear equations** is a collection of two or more linear equations sharing the same set of unknown variables.
+
+* **Example (2 Equations with 2 Unknowns):**
+  $$2x + y = 8$$
+  $$x - y = 1$$
+
+To "solve" this system means to find a pair of values $(x, y)$ that satisfies **both** equations at the same time. Let's solve this small system:
+1. From the second equation, we can express $x$ in terms of $y$: 
+   $$x = y + 1$$
+2. Substitute this expression into the first equation:
+   $$2(y + 1) + y = 8 \implies 2y + 2 + y = 8 \implies 3y = 6 \implies y = 2$$
+3. Now substitute $y = 2$ back to find $x$:
+   $$x = 2 + 1 = 3$$
+
+So, the unique solution is $x = 3$ and $y = 2$. Geometrically, if you draw these two equations as lines on a 2D grid, they will intersect at exactly the coordinate $(3, 2)$.
+
+---
+
+## 2. Machine Learning Motivation: Linear Regression
+
+How does this connect to AI and Machine Learning? 
+
+Imagine you are trying to predict electricity production ($y$) of a wind turbine based on wind speed ($x$). You collect historical data, and you assume the relationship is a straight line:
+
+$$y = wx + b$$
+
+* **$w$ (Weight / Slope):** How much electricity increases per unit of wind speed.
+* **$b$ (Bias / Intercept):** The baseline electricity produced when there is no wind.
+
+Here, the unknowns we need to find are **$w$** and **$b$**. 
+
+Suppose we observe two data points:
+1. At wind speed $x = 2 \text{ m/s}$, electricity produced is $y = 5$.
+2. At wind speed $x = 6 \text{ m/s}$, electricity produced is $y = 11$.
+
+We can plug these observations into our model to create a system of two linear equations:
+$$5 = w(2) + b \implies 2w + b = 5$$
+$$11 = w(6) + b \implies 6w + b = 11$$
+
+If we solve this system:
+* Subtract the first equation from the second: 
+  $$(6w + b) - (2w + b) = 11 - 5 \implies 4w = 6 \implies w = 1.5$$
+* Substitute $w = 1.5$ back into the first equation:
+  $$2(1.5) + b = 5 \implies 3 + b = 5 \implies b = 2$$
+
+So our predictive model is: **$y = 1.5x + 2$**.
+
+---
+
+## 3. Hands-on Experiment
+
+In real life, we don't just have 2 data points; we have hundreds or thousands! We cannot draw a single straight line that passes through all of them perfectly. Instead, we try to find the "best fitting line" that gets as close as possible to all data points.
+
+Use the interactive chart below to manually adjust the **Slope ($w$)** and **Intercept ($b$)** to fit the scattered data points.
+
+<LineChart 
+  title="Fitting a Linear Regression Line to Data"
+  xAxisLabel="Wind Speed (x)"
+  yAxisLabel="Electricity Output (y)"
+  initialSlope={1.0}
+  initialIntercept={4}
+  showDataPoints={true}
+/>
+
+---
+
+## 4. Check Your Understanding
+
+<Quiz 
+  question="You have two data points in your dataset: (1, 3) and (3, 7). You assume a linear relationship y = wx + b. If you write these points as a system of linear equations, what are the values of the weight (w) and bias (b)?"
+  options={[
+    { text: "w = 2, b = 1", isCorrect: true },
+    { text: "w = 1.5, b = 2", isCorrect: false },
+    { text: "w = 3, b = 0", isCorrect: false },
+    { text: "w = 2, b = 2", isCorrect: false }
+  ]}
+  explanation="Plugging the points into y = wx + b gives: (1) 3 = 1w + b, and (2) 7 = 3w + b. Subtracting equation (1) from (2) gives: 4 = 2w, so w = 2. Plunging w = 2 back into (1) gives: 3 = 2(1) + b, so b = 1."
+/>

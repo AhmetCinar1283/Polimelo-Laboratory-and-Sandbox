@@ -1,9 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import SayHello from "@/components/lab/SayHello";
-import MatrixMultiplier from "@/components/lab/MatrixMultiplier";
-import LinearRegression from "@/components/lab/LinearRegression";
-import { labsRegistry } from "@/registry/labs";
+import { labsRegistry, getResolvedLecture } from "@/registry/labs";
+import { LAB_COMPONENTS } from "@/components/lab/registry";
 import SafeImage from "@/components/SafeImage";
 import type { Metadata } from "next";
 
@@ -44,21 +42,16 @@ export default async function LabDetailPage({ params }: PageProps) {
 
   // Component lookup
   const renderVisualizer = () => {
-    switch (projectId) {
-      case "say-hello":
-        return <SayHello />;
-      case "matrix-multiplier":
-        return <MatrixMultiplier />;
-      case "linear-regression":
-        return <LinearRegression />;
-      default:
-        return (
-          <div style={{ padding: "40px 0", textAlign: "center" }}>
-            <h2 style={{ fontFamily: "Georgia, serif" }}>Module Not Found</h2>
-            <p>The requested computation registry entry could not be located.</p>
-          </div>
-        );
+    const Component = LAB_COMPONENTS[projectId];
+    if (Component) {
+      return <Component />;
     }
+    return (
+      <div style={{ padding: "40px 0", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "Georgia, serif" }}>Module Not Found</h2>
+        <p>The requested computation registry entry could not be located.</p>
+      </div>
+    );
   };
 
   const labSchema = activeLab ? {
@@ -89,6 +82,14 @@ export default async function LabDetailPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(labSchema) }}
         />
       )}
+      {activeLab && activeLab.referencedLectures.map((ref) => (
+        <script
+          key={ref.courseId}
+          dangerouslySetInnerHTML={{
+            __html: `localStorage.setItem('last-visited-item:${ref.courseId}', 'lab:${projectId}')`
+          }}
+        />
+      ))}
       <div style={{ maxWidth: "850px", margin: "0 auto" }} className="animate-fade-in">
         
         {/* Navigation */}
@@ -155,21 +156,24 @@ export default async function LabDetailPage({ params }: PageProps) {
               Theoretical References
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {activeLab.referencedLectures.map((lecture, idx) => (
-                <div key={idx} style={{ fontSize: "0.95rem" }}>
-                  <span style={{ color: "var(--text-muted)", fontFamily: "'Courier New', monospace", marginRight: "8px" }}>[{lecture.code}]</span>
-                  <Link 
-                    href={`/courses/${lecture.courseId}/${lecture.lectureSlug}`}
-                    style={{
-                      color: "var(--foreground)",
-                      textDecoration: "underline",
-                      fontWeight: "bold"
-                    }}
-                  >
-                    {lecture.lectureTitle} ↗
-                  </Link>
-                </div>
-              ))}
+              {activeLab.referencedLectures.map((ref, idx) => {
+                const lecture = getResolvedLecture(ref);
+                return (
+                  <div key={idx} style={{ fontSize: "0.95rem" }}>
+                    <span style={{ color: "var(--text-muted)", fontFamily: "'Courier New', monospace", marginRight: "8px" }}>[{lecture.code}]</span>
+                    <Link 
+                      href={`/courses/${lecture.courseId}/${lecture.lectureSlug}`}
+                      style={{
+                        color: "var(--foreground)",
+                        textDecoration: "underline",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {lecture.lectureTitle} ↗
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}

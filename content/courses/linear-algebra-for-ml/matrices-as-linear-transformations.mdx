@@ -1,0 +1,73 @@
+import { LinearTransformationVisualizer } from '@/components/courses/linear-algebra-for-ml'
+
+# 4.1 Matrices as Linear Transformations
+
+So far, we have viewed a matrix as a static spreadsheet of numbers representing data coefficients. But in geometry and deep learning, a matrix is a **dynamic action**! 
+
+A matrix acts like a function that takes a vector, bends/stretches the space, and outputs a new vector. We call this action a **Linear Transformation**.
+
+---
+
+## 1. What makes a transformation "Linear"?
+
+A transformation is linear if it satisfies two strict rules:
+1. **The origin must stay fixed:** The point $(0, 0)$ must never move.
+2. **Grid lines must remain straight and parallel:** Grid lines cannot curve, bend, or squeeze together unevenly.
+
+This means that any straight line in our original coordinate system must remain a straight line after the transformation.
+
+---
+
+## 2. The Secret: Track the Basis Vectors
+
+It seems incredibly complicated to track where millions of points in space land after a transformation. But there is a shortcut! 
+
+Because space is uniform and grid lines remain straight and parallel, **we only need to track the standard basis vectors**:
+* $\hat{i} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ (the unit step along the X axis).
+* $\hat{j} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ (the unit step along the Y axis).
+
+If we know where $\hat{i}$ and $\hat{j}$ land, we can calculate where **any other vector** in the entire space lands!
+
+---
+
+## 3. How a Matrix Encodes a Transformation
+
+A $2 \times 2$ matrix is actually just a compact package storing the landing spots of $\hat{i}$ and $\hat{j}$:
+
+$$M = \begin{bmatrix} \color{blue}{a} & \color{green}{b} \\ \color{blue}{c} & \color{green}{d} \end{bmatrix}$$
+
+* **Column 1 ($\begin{bmatrix} \color{blue}{a} \\ \color{blue}{c} \end{bmatrix}$):** The coordinate where $\hat{i}$ lands ($\hat{i}'$).
+* **Column 2 ($\begin{bmatrix} \color{green}{b} \\ \color{green}{d} \end{bmatrix}$):** The coordinate where $\hat{j}$ lands ($\hat{j}'$).
+
+### Multiplying a Vector
+When we multiply a vector $\mathbf{v} = \begin{bmatrix} x \\ y \end{bmatrix}$ by matrix $M$, we are simply scaling the transformed basis vectors:
+
+$$M\mathbf{v} = x \begin{bmatrix} a \\ c \end{bmatrix} + y \begin{bmatrix} b \\ d \end{bmatrix}$$
+
+* **Example:** If we want to find where vector $\mathbf{v} = \begin{bmatrix} 2 \\ 3 \end{bmatrix}$ lands under transformation $M = \begin{bmatrix} 1.5 & 0.5 \\ 0.5 & 1.5 \end{bmatrix}$:
+  $$M\mathbf{v} = 2 \begin{bmatrix} 1.5 \\ 0.5 \end{bmatrix} + 3 \begin{bmatrix} 0.5 \\ 1.5 \end{bmatrix} = \begin{bmatrix} 3 \\ 1 \end{bmatrix} + \begin{bmatrix} 1.5 \\ 4.5 \end{bmatrix} = \begin{bmatrix} 4.5 \\ 5.5 \end{bmatrix}$$
+
+---
+
+## 4. Interactive Transformation Workspace
+
+Use the sliders to modify matrix entries $a, b, c,$ and $d$. Observe how columns of the matrix map directly to the landing coordinates of the blue basis arrow ($\hat{i}'$) and green basis arrow ($\hat{j}'$).
+
+Try the **Shear** preset: Notice how the grid tilts, sliding the top of the grid to the right while keeping the bottom line fixed.
+
+<LinearTransformationVisualizer />
+
+---
+
+## 5. Check Your Understanding
+
+<Quiz 
+  question="A matrix transformation has column 1 as [0, 1]^T and column 2 as [-1, 0]^T. If you apply this transformation to the standard grid, what geometric effect does it produce?"
+  options={[
+    { text: "It rotates the grid 90 degrees counter-clockwise, because î lands at (0, 1) and ĵ lands at (-1, 0).", isCorrect: true },
+    { text: "It stretches the grid by a factor of 2.", isCorrect: false },
+    { text: "It squishes the grid into a flat line.", isCorrect: false },
+    { text: "It reflects the grid along the X-axis.", isCorrect: false }
+  ]}
+  explanation="The basis vector î starts at (1, 0) and lands at column 1: (0, 1). The basis vector ĵ starts at (0, 1) and lands at column 2: (-1, 0). Geometrically, this moves the horizontal axis to the vertical position and the vertical axis to the negative horizontal position, which is a 90-degree counter-clockwise rotation."
+/>
